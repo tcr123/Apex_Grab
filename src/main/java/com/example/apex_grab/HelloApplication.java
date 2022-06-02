@@ -88,7 +88,7 @@ public class HelloApplication extends Application {
 
     protected void startMoveDriverToUser(double time, ImageView imageView) {
         Path path = createPath();
-        canvas = new Canvas(SCENE_WIDTH,SCENE_HEIGHT);
+        canvas = new Canvas(SCENE_WIDTH-400,SCENE_HEIGHT);
         gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.TRANSPARENT);
 
@@ -147,7 +147,7 @@ public class HelloApplication extends Application {
 
     private void startMoveUserToLocation(double time, ImageView imageView) {
         Path path = createPath();
-        canvas = new Canvas(SCENE_WIDTH,SCENE_HEIGHT);
+        canvas = new Canvas(SCENE_WIDTH-400,SCENE_HEIGHT);
         gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.TRANSPARENT);
 
@@ -258,7 +258,7 @@ public class HelloApplication extends Application {
                     }
                     else if (oldLocation.getX() < x && oldLocation.getY() < y) {
                         System.out.println("pos" + 1);
-                        System.out.println(180 - Math.atan(degree) * 180 / 3.142);
+                        System.out.println(90 + Math.atan(degree) * 180 / 3.142);
                         imageView.setRotate(90 + Math.atan(degree) * 180 / 3.142);
                         /* if (degree < 0.20) {
                             imageView.setRotate(101.25);
@@ -278,7 +278,7 @@ public class HelloApplication extends Application {
                     }
                     else if (oldLocation.getX() < x && oldLocation.getY() > y) {
                         System.out.println("pos" + 2);
-                        System.out.println(90 - Math.atan(degree) * 180 / 3.142);
+                        System.out.println(Math.atan(degree) * 180 / 3.142);
                         imageView.setRotate(Math.atan(degree) * 180 / 3.142);
 //                        if (degree < 0.20) {
 //                            imageView.setRotate(11.25);

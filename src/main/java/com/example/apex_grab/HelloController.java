@@ -1,23 +1,25 @@
 package com.example.apex_grab;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
@@ -43,13 +45,32 @@ public class HelloController implements Initializable {
     @FXML
     private Label userLabel;
     @FXML
+    private Label capacityLabel;
+
+    @FXML
     private ChoiceBox<String> myChoiceBox;
     @FXML
     private ChoiceBox<String> userChoiceBox;
+    @FXML
+    private ChoiceBox<String> capacityBox;
 
-    private String[] place={"SLUMMLAKES","CONTAINEMENT","RUNOFF","THE PIT","AIRBASE","BUNKER","THUNDERDOME","SKULL TOWN","MARKET","WATER TREATMENT","REPULSOR","THE CAGE"};
+    @FXML
+    private TableView<Driver> driverTable;
+    @FXML
+    private TableColumn<Driver, String> driver_col;
+    @FXML
+    private TableColumn<Driver, Double> estimatedTime_col;
 
-    private String[] finalplace={"SLUMMLAKES","CONTAINEMENT","RUNOFF"};
+    Connection conn = null;
+    ResultSet driverRS = null;
+    ObservableList<Driver> oblist = FXCollections.observableArrayList();
+    ArrayList<Driver> driverList = new ArrayList<>();
+
+    private String[] place={"SLUMMLAKES","CONTAINEMENT","RUNOFF","THE PIT","AIRBASE","BUNKER","THUNDERDOME","SKULL TOWN","MARKET","WATER TREATMENT","REPULSOR","THE CAGE","ARTILLERY","RELAY","WETLANDS","SWAMPS","HYDRO DAM"};
+
+    private String[] finalplace={"SLUMMLAKES","CONTAINEMENT","RUNOFF","THE PIT","AIRBASE","BUNKER","THUNDERDOME","SKULL TOWN","MARKET","WATER TREATMENT","REPULSOR","THE CAGE","ARTILLERY","RELAY","WETLANDS","SWAMPS","HYDRO DAM"};
+
+    private String[] capacity = {"4", "6"};
 
     Image myImage = new Image(getClass().getResourceAsStream("Map.jpeg"));
 
@@ -66,6 +87,16 @@ public class HelloController implements Initializable {
         userChoiceBox.getItems().addAll(finalplace);
 
         userChoiceBox.setOnAction(this::getfinalPlace);
+
+        capacityBox.getItems().addAll(capacity);
+
+        capacityBox.setOnAction(this::getCapacity);
+
+    }
+
+    public void getCapacity(ActionEvent event) {
+        String myCapacity = capacityBox.getValue();
+        capacityLabel.setText(myCapacity);
     }
 
     public String getPlace(ActionEvent event){
@@ -161,12 +192,12 @@ public class HelloController implements Initializable {
     }
 
     //Button to start the driver toward the user (test)
-    public void starttherun(ActionEvent event) throws IOException{
+    public void starttherun(ActionEvent event) throws Exception {
 //        System.out.println(obj.userLocation);
         startFirst(stage);
     }
 
-    public void startFirst(Stage stage) throws IOException {
+    public void startFirst(Stage stage) throws Exception {
 //        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
 //        Group root = new Group();
 //        Scene scene = new Scene(root, Canvas.SCENE_WIDTH, Canvas.SCENE_HEIGHT);
@@ -180,7 +211,10 @@ public class HelloController implements Initializable {
 
         obj.setDriverLocation(driverLocation);
         obj.setUserLocation(userLocation);
+        Uconn.SelectLocation("hi", userLocation);
         obj.setFinalLocation(finalLocation);
+        Uconn.SelectDestination("hi", finalLocation);
+        Uconn.UsetCapacity("hi",capacityBox.getValue());
 
         try {
             Image image = new Image(new FileInputStream("src/main/resources/com/example/apex_grab/car.png"));
@@ -205,6 +239,46 @@ public class HelloController implements Initializable {
 
 //        stage.setScene(scene);
 //        stage.show();
+    }
+
+    public void submitButtonOnAction(ActionEvent event){
+        try {
+            oblist.clear();
+            driverList.clear();
+            conn = Uconn.getConnection();
+            int capacity = Integer.parseInt(capacityBox.getValue());
+            driverRS = conn.createStatement().executeQuery("SELECT * FROM driver WHERE capacity = "+capacity+"");
+
+            DijkstraMap map = new DijkstraMap(LocationKey.LocationNum(myChoiceBox.getValue()));
+            map.dijkstra();
+
+            // Return the time of travelling from initialLocation to finalLocation
+            double fixed_time = map.getDistance(LocationKey.LocationNum(userChoiceBox.getValue()));
+
+            while (driverRS.next()){
+                Driver temp = new Driver(driverRS.getString("name"), driverRS.getInt("capacity"),
+                        driverRS.getString("location"), driverRS.getString("status"),
+                        driverRS.getString("customer"), driverRS.getDouble("rating"),
+                        0);
+
+                DijkstraMap mapDriverToUser = new DijkstraMap(LocationKey.LocationNum(temp.getLocation()));
+                mapDriverToUser.dijkstra();
+
+                // Return the time of travelling from initialLocation to finalLocation
+                double time = mapDriverToUser.getDistance(LocationKey.LocationNum(myChoiceBox.getValue())) + fixed_time;
+
+                temp.setEstimatedTime(time);
+                driverList.add(temp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        oblist.addAll(driverList);
+
+        driver_col.setCellValueFactory(new PropertyValueFactory<>("name"));
+        estimatedTime_col.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
+
+        driverTable.setItems(oblist);
     }
 
 }
