@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loginassignment.HelloController">
+   <top>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </top>
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="406.0" fitWidth="189.0" layoutY="-2.0">
+               <image>
+                  <Image url="@../../../apexbanner.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </left>
+   <right>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="400.0" fitWidth="411.0" layoutX="-211.0" layoutY="-1.0">
+               <image>
+                  <Image url="@../../../register.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+   </right>
+   <bottom>
+      <AnchorPane prefHeight="199.0" prefWidth="606.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="wrongreg" layoutX="382.0" layoutY="158.0" prefHeight="0.0" prefWidth="204.0" textFill="RED">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="341.0" layoutY="-160.0" text="Sign Up Here">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="password" layoutX="365.0" layoutY="-26.0" prefHeight="26.0" prefWidth="197.0" promptText="Password" />
+            <TextField fx:id="username" layoutX="365.0" layoutY="-101.0" prefHeight="26.0" prefWidth="196.0" promptText="Username" />
+            <TextField fx:id="phone" layoutX="365.0" layoutY="-63.0" prefHeight="26.0" prefWidth="196.0" promptText="Phone Number" />
+            <Label layoutX="227.0" layoutY="-105.0" text="Username">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="227.0" layoutY="-68.0" text="Phone No.">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="232.0" layoutY="-31.0" text="Password">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnregister" layoutX="365.0" layoutY="21.0" mnemonicParsing="false" onAction="#goregis" prefHeight="26.0" prefWidth="198.0" text="Sign Up" />
+            <Label layoutX="227.0" layoutY="158.0" text="Got An Account?" textFill="WHITE" />
+            <Hyperlink fx:id="login" layoutX="316.0" layoutY="155.0" onAction="#gotologin" text="Login" />
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>
