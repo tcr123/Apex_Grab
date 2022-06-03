@@ -151,15 +151,14 @@ public class HelloController {
             Parent root = FXMLLoader.load(getClass().getResource("rename.fxml"));
             Stage window = (Stage)rec.getScene().getWindow();
             window.setScene(new Scene(root, 750, 500));
-            Uconn a=new Uconn();
-            a.setUsn(username.getText());
+            Uconn.setUsn(username.getText());
         }
 
     }
     // Rename to login through button
     public void gotorecreate(ActionEvent event) throws IOException {
-        Uconn a=new Uconn();
-        Uconn.setpass(a.getUsn(),recreatepass.getText());
+
+        Uconn.setpass(Uconn.getUsn(),recreatepass.getText());
         System.out.println("work");
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
         Stage window = (Stage)nnn.getScene().getWindow();

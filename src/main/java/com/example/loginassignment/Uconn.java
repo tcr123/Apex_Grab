@@ -9,18 +9,18 @@ import java.sql.ResultSet;
 public class Uconn {
     private static String usn;
 
-    public String getUsn() {
+    public static String getUsn() {
         return usn;
     }
 
-    public void setUsn(String usn) {
-        this.usn = usn;
+    public static void setUsn(String us) {
+        usn = us;
     }
 
     public static Connection getConnection() {
         try {
             String driver = "com.mysql.cj.jdbc.Driver";
-            String url = "jdbc:mysql://10.210.31.31:3306/apex";
+            String url = "jdbc:mysql://10.210.11.238:3306/apex";
             String username = "apex";
             String password = "1118";
             Class.forName(driver);
