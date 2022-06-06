@@ -19,7 +19,8 @@ public class Uconn {
     public static Connection getConnection() {
         try {
             String driver = "com.mysql.cj.jdbc.Driver";
-            String url = "jdbc:mysql://localhost:3306/apex";
+//            String url = "jdbc:mysql://localhost:3306/apex";
+            String url = "jdbc:mysql://10.210.6.168:3306/apex";
             String username = "apex";
             String password = "1118";
             Class.forName(driver);

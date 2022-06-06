@@ -11,15 +11,15 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loginassignment.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loginassignment.Animation">
    <children>
       <ImageView fitHeight="798.0" fitWidth="864.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@Map.jpeg" />
+            <Image url="@../../../Picture/Map.jpeg" />
          </image>
       </ImageView>
       <BorderPane prefHeight="200.0" prefWidth="200.0" />
-      <Button layoutX="1111.0" layoutY="605.0" mnemonicParsing="false" onAction="#starttherun" onKeyPressed="#starttherun" text="Test" />
+      <Button layoutX="1111.0" layoutY="605.0" mnemonicParsing="false" onAction="#starttherun" text="Test" />
       <ChoiceBox fx:id="myChoiceBox" layoutX="1013.0" layoutY="157.0" prefWidth="150.0" />
       <Label fx:id="myLabel" layoutX="851.0" layoutY="109.0" prefHeight="36.0" prefWidth="312.0" text="Where is your location?">
          <font>
