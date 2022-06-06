@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -71,9 +73,10 @@ public class Animation implements Initializable {
 
     private String[] capacity = {"4", "6"};
 
+    private HelloApplication obj;
+
     Image myImage = new Image(getClass().getResourceAsStream("Map.jpeg"));
 
-    temp obj = new temp();
     public static String username = "";
 
     public void displayImage() {
@@ -92,8 +95,11 @@ public class Animation implements Initializable {
 
         numberOfPassengersBox.getItems().addAll(capacity);
 
+        obj = new HelloApplication();
+
 //        capacityBox.setOnAction(this::getCapacity);
 
+        obj.initializeGroup();
     }
 
     public void getCapacity(ActionEvent event) {
@@ -231,7 +237,7 @@ public class Animation implements Initializable {
         System.out.println("BABI");
 
         try {
-            Image image = new Image(new FileInputStream("src/main/resources/com/example/apex_grab/car.png"));
+            Image image = new Image(new FileInputStream("src/main/resources/com/example/loginassignment/car.png"));
             ImageView imageView = new ImageView(image);
 
             double oldLocationX = LocationKey.Coordinate(driverLocation).getX();

@@ -39,18 +39,9 @@ public class HelloApplication {
     static Path path;
     static Group root;
 
-    public void start(Stage stage) throws IOException {
-
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("bookingPage.fxml"));
-//
-//        root = new Group();
-//        Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
-//        stage.setTitle("APEX E-hailing");
-//        root.getChildren().add(fxmlLoader.load());
-//        stage.setScene(scene);
-//        stage.show();
+    protected void initializeGroup() {
+        root = new Group();
     }
-
 
     protected void setDriverLocation(String driverLocation1) {
         driverLocation = driverLocation1;
@@ -341,8 +332,6 @@ public class HelloApplication {
                 oldLocation.setX(x);
                 oldLocation.setY(y);
             }
-
-
         });
 
         return pathTransition;
