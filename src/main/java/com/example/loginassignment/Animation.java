@@ -74,7 +74,7 @@ public class Animation implements Initializable {
     Image myImage = new Image(getClass().getResourceAsStream("Map.jpeg"));
 
     temp obj = new temp();
-
+    public static String username = "";
 
     public void displayImage() {
         myImageView.setImage(myImage);
@@ -224,10 +224,10 @@ public class Animation implements Initializable {
 
         obj.setDriverLocation(driverLocation);
         obj.setUserLocation(userLocation);
-        Uconn.SelectLocation("hi", userLocation);
+        Uconn.SelectLocation(username, userLocation);
         obj.setFinalLocation(finalLocation);
-        Uconn.SelectDestination("hi", finalLocation);
-        Uconn.UsetCapacity("hi", numberOfPassengersBox.getValue());
+        Uconn.SelectDestination(username, finalLocation);
+        Uconn.UsetCapacity(username, numberOfPassengersBox.getValue());
         System.out.println("BABI");
 
         try {

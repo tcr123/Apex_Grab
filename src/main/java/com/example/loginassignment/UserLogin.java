@@ -34,6 +34,7 @@ public class UserLogin extends Application {
         System.out.println(sw);
         if(sw==0){
             alertMessage.setText("success!");
+            Animation.username = username.getText();
             Parent root = FXMLLoader.load(getClass().getResource("bookingPage.fxml"));
             Stage stage = (Stage) username.getScene().getWindow();
             Scene scene = new Scene(root);
