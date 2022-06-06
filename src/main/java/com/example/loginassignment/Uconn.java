@@ -113,7 +113,7 @@ public class Uconn {
     public static void SelectLocation(String Username,String Location) throws Exception {
         //invote this method after user enter his current location
         Connection con = getConnection();
-        PreparedStatement statement = con.prepareStatement("UPDATE apex.user SET `starting point` = '"+Location+"' WHERE (`username` ='"+Username+"' )");
+        PreparedStatement statement = con.prepareStatement("UPDATE apex.user SET starting point = '"+Location+"' WHERE username = '"+Username+"'");
         statement.executeUpdate();
     }
 

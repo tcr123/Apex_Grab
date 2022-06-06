@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -31,7 +32,8 @@ public class Animation implements Initializable {
     private Parent root;
     private double time;
     private Group rt;
-    private Button start;
+    private Button start,
+            testButton;
     private String driverLocation;
     private String userLocation;
     private String finalLocation;
@@ -40,17 +42,16 @@ public class Animation implements Initializable {
     private static final double offSetY = 15;
 
     @FXML
-    private Label myLabel;
+    private Label myLabel,
+            userLabel,
+            capacityLabel,
+            alertMessage;
     @FXML
-    private Label userLabel;
+    private ChoiceBox<String> originBox;
     @FXML
-    private Label capacityLabel;
+    private ChoiceBox<String> destinationBox;
     @FXML
-    private ChoiceBox<String> myChoiceBox;
-    @FXML
-    private ChoiceBox<String> userChoiceBox;
-    @FXML
-    private ChoiceBox<String> capacityBox;
+    private ChoiceBox<String> numberOfPassengersBox;
     @FXML
     private TableView<Driver> driverTable;
     @FXML
@@ -81,29 +82,29 @@ public class Animation implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1){
-        myChoiceBox.getItems().addAll(place);
+        originBox.getItems().addAll(place);
 
-        myChoiceBox.setOnAction(this::getPlace);
+//        myChoiceBox.setOnAction(this::getPlace);
 
-        userChoiceBox.getItems().addAll(finalplace);
+        destinationBox.getItems().addAll(finalplace);
 
-        userChoiceBox.setOnAction(this::getfinalPlace);
+//        userChoiceBox.setOnAction(this::getfinalPlace);
 
-        capacityBox.getItems().addAll(capacity);
+        numberOfPassengersBox.getItems().addAll(capacity);
 
-        capacityBox.setOnAction(this::getCapacity);
+//        capacityBox.setOnAction(this::getCapacity);
 
     }
 
     public void getCapacity(ActionEvent event) {
-        String myCapacity = capacityBox.getValue();
+        String myCapacity = numberOfPassengersBox.getValue();
         capacityLabel.setText(myCapacity);
     }
 
     public String getPlace(ActionEvent event){
-        if (myChoiceBox == null)
+        if (originBox == null)
             return null;
-        String myPlace = myChoiceBox.getValue();
+        String myPlace = originBox.getValue();
         myLabel.setText("Going to "+myPlace+" ?");
         switch  (myPlace)
         {
@@ -148,9 +149,9 @@ public class Animation implements Initializable {
 
 
     public String getfinalPlace(ActionEvent event){
-        if (userChoiceBox == null)
+        if (destinationBox == null)
             return null;
-        String usermyPlace = userChoiceBox.getValue();
+        String usermyPlace = destinationBox.getValue();
         userLabel.setText("Wanna Go to "+usermyPlace+" ?");
         switch  (usermyPlace)
         {
@@ -196,10 +197,11 @@ public class Animation implements Initializable {
     //Button to start the driver toward the user (test)
     public void starttherun(ActionEvent event) throws Exception {
 //        System.out.println(obj.userLocation);
-        startFirst(stage);
+        String driver = getDriverFromTable();
+        startFirst(stage, driver);
     }
 
-    public void startFirst(Stage stage) throws Exception {
+    public void startFirst(Stage stage, String driver) throws Exception {
 //        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("bookingPage.fxml"));
 //        Group root = new Group();
 //        Scene scene = new Scene(root, Canvas.SCENE_WIDTH, Canvas.SCENE_HEIGHT);
@@ -207,16 +209,25 @@ public class Animation implements Initializable {
 //        root.getChildren().add(fxmlLoader.load());
 
         //from database
-        driverLocation = "SLUMMLAKES";
+        conn = Uconn.getConnection();
+        PreparedStatement statement = conn.prepareStatement("SELECT * FROM driver WHERE name = '"+driver+"'");
+        ResultSet rs = statement.executeQuery();
+        while (rs.next()) {
+            driverLocation = rs.getString("location");
+        }
+        System.out.println(driverLocation);
         //put final button
 //        finalLocation = "THE CAGE";
+        userLocation = originBox.getValue();
+        finalLocation = destinationBox.getValue();
+        System.out.println(finalLocation);
 
         obj.setDriverLocation(driverLocation);
         obj.setUserLocation(userLocation);
         Uconn.SelectLocation("hi", userLocation);
         obj.setFinalLocation(finalLocation);
         Uconn.SelectDestination("hi", finalLocation);
-        Uconn.UsetCapacity("hi",capacityBox.getValue());
+        Uconn.UsetCapacity("hi", numberOfPassengersBox.getValue());
         System.out.println("BABI");
 
         try {
@@ -245,42 +256,63 @@ public class Animation implements Initializable {
     }
 
     public void submitButtonOnAction(ActionEvent event){
-        try {
-            oblist.clear();
-            driverList.clear();
-            conn = Uconn.getConnection();
-            int capacity = Integer.parseInt(capacityBox.getValue());
-            driverRS = conn.createStatement().executeQuery("SELECT * FROM driver WHERE capacity = "+capacity+"");
+        if (originBox.getValue() == null){
+            alertMessage.setText("Please enter origin!");
+        } else if (destinationBox.getValue() == null){
+            alertMessage.setText("Please enter destination!");
+        } else if (numberOfPassengersBox.getValue() == null){
+            alertMessage.setText("Please enter number of passengers!");
+        } else if (originBox.getValue().equals(destinationBox.getValue())){
+            alertMessage.setText("Origin and Destination should not be same!");
+        } else {
+            try {
+                oblist.clear();
+                driverList.clear();
+                conn = Uconn.getConnection();
+                int capacity = Integer.parseInt(numberOfPassengersBox.getValue());
+                driverRS = conn.createStatement().executeQuery("SELECT * FROM driver WHERE capacity = " + capacity + "");
 
-            DijkstraMap map = new DijkstraMap(LocationKey.LocationNum(myChoiceBox.getValue()));
-            map.dijkstra();
-
-            // Return the time of travelling from initialLocation to finalLocation
-            double fixed_time = map.getDistance(LocationKey.LocationNum(userChoiceBox.getValue()));
-
-            while (driverRS.next()){
-                Driver temp = new Driver(driverRS.getString("name"), driverRS.getInt("capacity"),
-                        driverRS.getString("location"), driverRS.getString("status"),
-                        driverRS.getString("customer"), driverRS.getDouble("rating"),
-                        0);
-
-                DijkstraMap mapDriverToUser = new DijkstraMap(LocationKey.LocationNum(temp.getLocation()));
-                mapDriverToUser.dijkstra();
+                DijkstraMap map = new DijkstraMap(LocationKey.LocationNum(originBox.getValue()));
+                map.dijkstra();
 
                 // Return the time of travelling from initialLocation to finalLocation
-                double time = mapDriverToUser.getDistance(LocationKey.LocationNum(myChoiceBox.getValue())) + fixed_time;
+                double fixed_time = map.getDistance(LocationKey.LocationNum(destinationBox.getValue()));
 
-                temp.setEstimatedTime(time);
-                driverList.add(temp);
+                while (driverRS.next()) {
+                    Driver temp = new Driver(driverRS.getString("name"), driverRS.getInt("capacity"),
+                            driverRS.getString("location"), driverRS.getString("status"),
+                            driverRS.getString("customer"), driverRS.getDouble("rating"),
+                            0);
+
+                    DijkstraMap mapDriverToUser = new DijkstraMap(LocationKey.LocationNum(temp.getLocation()));
+                    mapDriverToUser.dijkstra();
+
+                    // Return the time of travelling from initialLocation to finalLocation
+                    double time = mapDriverToUser.getDistance(LocationKey.LocationNum(originBox.getValue())) + fixed_time;
+
+                    temp.setEstimatedTime(time);
+                    driverList.add(temp);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            oblist.addAll(driverList);
+
+            driver_col.setCellValueFactory(new PropertyValueFactory<>("name"));
+            estimatedTime_col.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
+
+            driverTable.setItems(oblist);
         }
-        oblist.addAll(driverList);
+    }
 
-        driver_col.setCellValueFactory(new PropertyValueFactory<>("name"));
-        estimatedTime_col.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
-
-        driverTable.setItems(oblist);
+    public String getDriverFromTable(){
+        if (driverTable.getSelectionModel().getSelectedItem() == null){
+            alertMessage.setText("Please select a driver!");
+        } else {
+            String selectedDriver = driverTable.getSelectionModel().getSelectedItem().getName();
+            System.out.println(selectedDriver);
+            return selectedDriver;
+        }
+        return null;
     }
 }

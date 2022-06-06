@@ -19,31 +19,36 @@
          </image>
       </ImageView>
       <BorderPane prefHeight="200.0" prefWidth="200.0" />
-      <Button layoutX="1111.0" layoutY="605.0" mnemonicParsing="false" onAction="#starttherun" text="Test" />
-      <ChoiceBox fx:id="myChoiceBox" layoutX="1013.0" layoutY="157.0" prefWidth="150.0" />
-      <Label fx:id="myLabel" layoutX="851.0" layoutY="109.0" prefHeight="36.0" prefWidth="312.0" text="Where is your location?">
+      <Button fx:id="testButton" layoutX="1111.0" layoutY="605.0" mnemonicParsing="false" onAction="#starttherun" text="Test" />
+      <ChoiceBox fx:id="originBox" layoutX="1013.0" layoutY="116.0" prefHeight="25.0" prefWidth="172.0" />
+      <Label fx:id="myLabel" layoutX="822.0" layoutY="110.0" prefHeight="36.0" prefWidth="161.0" text="Origin: ">
          <font>
-            <Font size="25.0" />
+            <Font size="18.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="userChoiceBox" layoutX="1013.0" layoutY="251.0" prefWidth="150.0" />
-      <Label fx:id="userLabel" layoutX="851.0" layoutY="200.0" prefHeight="36.0" prefWidth="312.0" text="Where you want to go?">
+      <ChoiceBox fx:id="destinationBox" layoutX="1013.0" layoutY="159.0" prefHeight="25.0" prefWidth="172.0" />
+      <Label fx:id="userLabel" layoutX="822.0" layoutY="153.0" prefHeight="36.0" prefWidth="161.0" text="Destination: ">
          <font>
-            <Font size="25.0" />
+            <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="capacityLabel" layoutX="851.0" layoutY="301.0" prefHeight="36.0" prefWidth="312.0" text="Capacity">
+      <Label fx:id="capacityLabel" layoutX="824.0" layoutY="195.0" prefHeight="36.0" prefWidth="187.0" text="Number of Passengers:">
          <font>
-            <Font size="25.0" />
+            <Font size="18.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="capacityBox" layoutX="1013.0" layoutY="337.0" prefWidth="150.0" />
-      <TableView fx:id="driverTable" layoutX="813.0" layoutY="430.0" prefHeight="267.0" prefWidth="253.0">
+      <ChoiceBox fx:id="numberOfPassengersBox" layoutX="1013.0" layoutY="201.0" prefHeight="25.0" prefWidth="172.0" />
+      <TableView fx:id="driverTable" layoutX="816.0" layoutY="309.0" prefHeight="267.0" prefWidth="369.0">
         <columns>
-          <TableColumn fx:id="driver_col" prefWidth="75.0" text="Driver" />
-          <TableColumn fx:id="estimatedTime_col" prefWidth="121.0" text="Estimated Time" />
+          <TableColumn fx:id="driver_col" prefWidth="267.0" text="Driver" />
+          <TableColumn fx:id="estimatedTime_col" prefWidth="101.0" text="Estimated Time" />
         </columns>
       </TableView>
-      <Button fx:id="submitButton" layoutX="1082.0" layoutY="375.0" mnemonicParsing="false" onAction="#submitButtonOnAction" prefHeight="25.0" prefWidth="71.0" text="Submit" />
+      <Button fx:id="submitButton" layoutX="1094.0" layoutY="240.0" mnemonicParsing="false" onAction="#submitButtonOnAction" prefHeight="25.0" prefWidth="71.0" text="Submit" />
+      <Label fx:id="alertMessage" alignment="CENTER" layoutX="815.0" layoutY="272.0" prefHeight="20.0" prefWidth="369.0" textAlignment="CENTER" textFill="RED">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
