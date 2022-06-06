@@ -15,7 +15,7 @@
    <children>
       <ImageView fitHeight="798.0" fitWidth="864.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../Picture/Map.jpeg" />
+            <Image url="@Map.jpeg" />
          </image>
       </ImageView>
       <BorderPane prefHeight="200.0" prefWidth="200.0" />

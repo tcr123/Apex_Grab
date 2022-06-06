@@ -17,7 +17,7 @@
          <children>
             <ImageView fitHeight="400.0" fitWidth="195.0">
                <image>
-                  <Image url="@../../../Picture/apexbanner.png" />
+                  <Image url="@../../../apexbanner.png" />
                </image>
             </ImageView>
          </children>
@@ -28,7 +28,7 @@
          <children>
             <ImageView fx:id="srs" fitHeight="400.0" fitWidth="406.0">
                <image>
-                  <Image url="@../../../Picture/loginpage.png" />
+                  <Image url="@../../../loginpage.png" />
                </image>
             </ImageView>
             <Label layoutX="65.0" layoutY="133.0" text="Password">
