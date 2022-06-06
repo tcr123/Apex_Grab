@@ -1,6 +1,5 @@
 package com.example.loginassignment;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,7 +19,7 @@ public class Uconn {
     public static Connection getConnection() {
         try {
             String driver = "com.mysql.cj.jdbc.Driver";
-            String url = "jdbc:mysql://10.210.11.238:3306/apex";
+            String url = "jdbc:mysql://localhost:3306/apex";
             String username = "apex";
             String password = "1118";
             Class.forName(driver);
@@ -66,7 +65,6 @@ public class Uconn {
             //INSERT INTO member TABLE
             statement = con.prepareStatement("INSERT INTO apex.user (username,phone,password)VALUES ( '" + username + "', '" + phone + "' , '" + pass + "' )");
             statement.executeUpdate();
-
 
 
         } catch (Exception e) {
@@ -120,9 +118,12 @@ public class Uconn {
 
     public static void SelectDestination(String Username,String Destination) throws Exception {
         //invote this method after user enter his destination\
+
         Connection con = getConnection();
         PreparedStatement statement = con.prepareStatement("UPDATE apex.user SET `destination ` = '"+Destination+"', 'status'='Pending' WHERE (`username` ='"+Username+"' )");
         statement.executeUpdate();
+
+        System.out.println("Helpless");
     }
     public static int UgetCapacity(String name) throws Exception {
         //fetch user capacity
@@ -134,6 +135,14 @@ public class Uconn {
             re = exist.getInt("capacity");
         }
         return re;
+    }
+
+    public static void UsetCapacity(String name, String num) throws Exception {
+        //fetch user capacity
+        Connection con = getConnection();
+        PreparedStatement statement = con.prepareStatement("UPDATE `apex`.`user` SET `capacity` = '"+num+"' WHERE `username` = '"+name+"'");
+        statement.executeUpdate();
+
     }
 
     public static ResultSet ShowDriver(String name) throws Exception {
@@ -217,6 +226,5 @@ public class Uconn {
             System.out.println(e);
         }
     }
-
 
 }

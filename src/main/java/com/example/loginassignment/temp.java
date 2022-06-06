@@ -1,67 +1,42 @@
-package com.example.loginassignment;
-
-import javafx.animation.Animation;
-import javafx.animation.PathTransition;
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.io.IOException;
-
-public class HelloApplication extends Application {
-    private static double SCENE_WIDTH = 1200;
-    private static double SCENE_HEIGHT = 800;
-
-    Canvas c = new Canvas();
-    private static ArrayList<Location> location = new ArrayList<>();
-    static String driverLocation;
-    static String userLocation;
-    static String finalLocation;
-
-    static Canvas canvas;
-    static GraphicsContext gc;
-    static Path path;
-    static Group root;
-
-    @Override
-    public void start(Stage stage) throws IOException {
-
-        //problem here line 46
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("Apex E-Hailing");
-        stage.setScene(scene);
-        stage.show();
-        System.out.println("Work start");
-
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+//package com.example.loginassignment;
 //
-//        root = new Group();
-//        Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
-//        stage.setTitle("APEX E-hailing");
-//        root.getChildren().add(fxmlLoader.load());
-//        stage.setScene(scene);
-//        stage.show();
-    }
-
-
-//    protected void setDriverLocation(String driverLocation1) {
+//import javafx.animation.Animation;
+//import javafx.animation.PathTransition;
+//import javafx.application.Application;
+//import javafx.beans.value.ChangeListener;
+//import javafx.beans.value.ObservableValue;
+//import javafx.fxml.FXMLLoader;
+//import javafx.scene.Group;
+//import javafx.scene.Scene;
+//import javafx.scene.canvas.Canvas;
+//import javafx.scene.canvas.GraphicsContext;
+//import javafx.scene.image.ImageView;
+//import javafx.scene.paint.Color;
+//import javafx.scene.shape.Circle;
+//import javafx.scene.shape.LineTo;
+//import javafx.scene.shape.MoveTo;
+//import javafx.scene.shape.Path;
+//import javafx.stage.Stage;
+//import javafx.util.Duration;
+//import java.io.FileInputStream;
+//import java.io.FileNotFoundException;
+//import java.util.ArrayList;
+//
+//public class temp {
+//        private static double SCENE_WIDTH = 1200;
+//        private static double SCENE_HEIGHT = 800;
+//        javafx.scene.canvas.Canvas c = new javafx.scene.canvas.Canvas();
+//        private static ArrayList<Location> location = new ArrayList<>();
+//        static String driverLocation;
+//        static String userLocation;
+//        static String finalLocation;
+//
+//        static javafx.scene.canvas.Canvas canvas;
+//        static GraphicsContext gc;
+//        static Path path;
+//        static Group root;
+//
+//        protected void setDriverLocation(String driverLocation1) {
 //        driverLocation = driverLocation1;
 //    }
 //
@@ -88,7 +63,7 @@ public class HelloApplication extends Application {
 //
 //    protected void startMoveDriverToUser(double time, ImageView imageView) {
 //        Path path = createPath();
-//        canvas = new Canvas(SCENE_WIDTH-400,SCENE_HEIGHT);
+//        canvas = new javafx.scene.canvas.Canvas(SCENE_WIDTH-400,SCENE_HEIGHT);
 //        gc = canvas.getGraphicsContext2D();
 //        gc.setFill(Color.TRANSPARENT);
 //
@@ -103,7 +78,7 @@ public class HelloApplication extends Application {
 //        root.getChildren().add(imageView);
 //        rotateCar(imageView, location.get(0), location.get(1));
 //
-//        Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW, imageView);
+//        javafx.animation.Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW, imageView);
 //        animation2.setDelay(Duration.millis(100));
 //        animation2.play();
 //        animation2.setOnFinished(e -> clear(path, destination_point, true, imageView));
@@ -162,7 +137,7 @@ public class HelloApplication extends Application {
 //        root.getChildren().add(imageView);
 //        rotateCar(imageView, location.get(0), location.get(1));
 //
-//        Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW, imageView);
+//        javafx.animation.Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW, imageView);
 //        animation2.setDelay(Duration.millis(200));
 //        animation2.play();
 //        animation2.setOnFinished(e -> clear(path, destination_point, false, null));
@@ -357,9 +332,37 @@ public class HelloApplication extends Application {
 //        return pathTransition;
 //
 //    }
+//}
 
-    public static void main(String[] args) {
-        launch();
-    }
+//public class HelloApplication extends Application {
 
-}
+
+//    @Override
+//    public void start(Stage stage) throws Exception {
+////        login l = new login(stage);
+////        login.start(stage);
+//
+////        HelloController hello = new HelloController(place);
+////        hello.setPlace();
+//
+//
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+//
+//        root = new Group();
+//        Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
+//        stage.setTitle("APEX E-hailing");
+//        root.getChildren().add(fxmlLoader.load());
+//        stage.setScene(scene);
+//        stage.show();
+//
+////        driverLocation = "SLUMMLAKES";
+////        userLocation = "BUNKER";
+////        finalLocation = "THE CAGE";
+////
+////        double time = findPath(driverLocation, userLocation);
+////        startMoveDriverToUser(root, time);
+//
+//
+//    }
+//
+
