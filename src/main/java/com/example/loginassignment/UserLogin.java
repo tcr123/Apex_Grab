@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -35,8 +36,9 @@ public class UserLogin extends Application {
         if(sw==0){
             alertMessage.setText("success!");
             Animation.username = username.getText();
-            Parent root = FXMLLoader.load(getClass().getResource("bookingPage.fxml"));
+            Pane root = FXMLLoader.load(getClass().getResource("bookingPage.fxml"));
             Stage stage = (Stage) username.getScene().getWindow();
+            HelloApplication.initializeGroup(root);
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

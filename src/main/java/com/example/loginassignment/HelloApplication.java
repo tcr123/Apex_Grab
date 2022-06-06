@@ -12,6 +12,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
@@ -37,10 +38,10 @@ public class HelloApplication {
     static Canvas canvas;
     static GraphicsContext gc;
     static Path path;
-    static Group root;
+    static Pane root;
 
-    protected void initializeGroup() {
-        root = new Group();
+    protected static void initializeGroup(Pane rt) {
+        root = rt;
     }
 
     protected void setDriverLocation(String driverLocation1) {

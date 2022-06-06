@@ -39,6 +39,7 @@ public class Animation implements Initializable {
     private String driverLocation;
     private String userLocation;
     private String finalLocation;
+    private String userSelectionTime;
 
     private static final double offSetX = 5;
     private static final double offSetY = 15;
@@ -54,6 +55,8 @@ public class Animation implements Initializable {
     private ChoiceBox<String> destinationBox;
     @FXML
     private ChoiceBox<String> numberOfPassengersBox;
+    @FXML
+    private ChoiceBox<String> esitmatedTime;
     @FXML
     private TableView<Driver> driverTable;
     @FXML
@@ -72,6 +75,8 @@ public class Animation implements Initializable {
     private String[] finalplace={"SLUMMLAKES","CONTAINEMENT","RUNOFF","THE PIT","AIRBASE","BUNKER","THUNDERDOME","SKULL TOWN","MARKET","WATER TREATMENT","REPULSOR","THE CAGE","ARTILLERY","RELAY","WETLANDS","SWAMPS","HYDRO DAM"};
 
     private String[] capacity = {"4", "6"};
+
+    private String[] listOfTime = {"nothing", "5", "10", "15", "20", "25", "30"};
 
     private HelloApplication obj;
 
@@ -95,11 +100,15 @@ public class Animation implements Initializable {
 
         numberOfPassengersBox.getItems().addAll(capacity);
 
+        esitmatedTime.getItems().addAll(listOfTime);
+
         obj = new HelloApplication();
 
 //        capacityBox.setOnAction(this::getCapacity);
+    }
 
-        obj.initializeGroup();
+    public void getEstimatedTime(ActionEvent event) {
+        String estimatedTime = esitmatedTime.getValue();
     }
 
     public void getCapacity(ActionEvent event) {
@@ -204,6 +213,7 @@ public class Animation implements Initializable {
     public void starttherun(ActionEvent event) throws Exception {
 //        System.out.println(obj.userLocation);
         String driver = getDriverFromTable();
+        System.out.println(driver);
         startFirst(stage, driver);
     }
 
@@ -234,7 +244,6 @@ public class Animation implements Initializable {
         obj.setFinalLocation(finalLocation);
         Uconn.SelectDestination(username, finalLocation);
         Uconn.UsetCapacity(username, numberOfPassengersBox.getValue());
-        System.out.println("BABI");
 
         try {
             Image image = new Image(new FileInputStream("src/main/resources/com/example/loginassignment/car.png"));
@@ -270,6 +279,8 @@ public class Animation implements Initializable {
             alertMessage.setText("Please enter number of passengers!");
         } else if (originBox.getValue().equals(destinationBox.getValue())){
             alertMessage.setText("Origin and Destination should not be same!");
+        } else if (esitmatedTime.getValue() == null){
+            alertMessage.setText("Please select a range of time");
         } else {
             try {
                 oblist.clear();
@@ -280,6 +291,8 @@ public class Animation implements Initializable {
 
                 DijkstraMap map = new DijkstraMap(LocationKey.LocationNum(originBox.getValue()));
                 map.dijkstra();
+
+                userSelectionTime = esitmatedTime.getValue();
 
                 // Return the time of travelling from initialLocation to finalLocation
                 double fixed_time = map.getDistance(LocationKey.LocationNum(destinationBox.getValue()));
@@ -296,8 +309,16 @@ public class Animation implements Initializable {
                     // Return the time of travelling from initialLocation to finalLocation
                     double time = mapDriverToUser.getDistance(LocationKey.LocationNum(originBox.getValue())) + fixed_time;
 
-                    temp.setEstimatedTime(time);
-                    driverList.add(temp);
+                    if (userSelectionTime.compareTo("nothing") != 0) {
+                        if (Integer.parseInt(userSelectionTime) > time) {
+                            temp.setEstimatedTime(time);
+                            driverList.add(temp);
+                        }
+                    }
+                    else {
+                        temp.setEstimatedTime(time);
+                        driverList.add(temp);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
