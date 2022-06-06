@@ -1,5 +1,6 @@
 package com.example.loginassignment;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +23,9 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Animation implements Initializable {
@@ -48,7 +51,8 @@ public class Animation implements Initializable {
     private Label myLabel,
             userLabel,
             capacityLabel,
-            alertMessage;
+            alertMessage,
+            SystemTime;
     @FXML
     private ChoiceBox<String> originBox;
     @FXML
@@ -69,6 +73,8 @@ public class Animation implements Initializable {
     ResultSet driverRS = null;
     ObservableList<Driver> oblist = FXCollections.observableArrayList();
     ArrayList<Driver> driverList = new ArrayList<>();
+
+    private volatile boolean stop = false;
 
     private String[] place={"SLUMMLAKES","CONTAINEMENT","RUNOFF","THE PIT","AIRBASE","BUNKER","THUNDERDOME","SKULL TOWN","MARKET","WATER TREATMENT","REPULSOR","THE CAGE","ARTILLERY","RELAY","WETLANDS","SWAMPS","HYDRO DAM"};
 
@@ -102,6 +108,8 @@ public class Animation implements Initializable {
 
         esitmatedTime.getItems().addAll(listOfTime);
 
+        Timenow();
+
         obj = new HelloApplication();
 
 //        capacityBox.setOnAction(this::getCapacity);
@@ -114,6 +122,28 @@ public class Animation implements Initializable {
     public void getCapacity(ActionEvent event) {
         String myCapacity = numberOfPassengersBox.getValue();
         capacityLabel.setText(myCapacity);
+    }
+
+    private void Timenow() {
+        Thread thread = new Thread(() -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss aa");
+            while (!stop) {
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                String timeFormat[] = sdf.format(new Date()).split(":");
+                timeFormat[1] = String.valueOf(Integer.parseInt(timeFormat[1]) % 12);
+                final String timenow = timeFormat[1] + ":" +timeFormat[2];
+                System.out.println(timenow);
+                Platform.runLater( () -> {
+                    SystemTime.setText(timenow);
+                });
+            }
+        });
+
+        thread.start();
     }
 
     public String getPlace(ActionEvent event){
