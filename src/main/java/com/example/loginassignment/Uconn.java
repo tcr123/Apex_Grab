@@ -121,7 +121,7 @@ public class Uconn {
         //invote this method after user enter his destination\
 
         Connection con = getConnection();
-        PreparedStatement statement = con.prepareStatement("UPDATE apex.user SET destination = '"+Destination+"', status = 'Pending' WHERE username = '"+Username+"'");
+        PreparedStatement statement = con.prepareStatement("UPDATE apex.user SET destination = '"+Destination+"' WHERE username = '"+Username+"'");
         statement.executeUpdate();
 
         System.out.println("Helpless");
@@ -146,37 +146,41 @@ public class Uconn {
 
     }
 
-    public static ResultSet ShowDriver(String name) throws Exception {
+    // show driver list
+    public static ResultSet ShowDriver(String name, int capacity) throws Exception {
         //fetch available driver
         Connection con = getConnection();
-        int num=UgetCapacity(name);
-        PreparedStatement statement = con.prepareStatement("SELECT `name`,`capacity`,`rating` FROM apex.driver   where capacity='"+num+"' AND status= 'Available' ");
+//        int num=UgetCapacity(name);
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM apex.driver where capacity='"+ capacity +"' AND status= 'Available' ");
         ResultSet exist = statement.executeQuery();
         PreparedStatement statement2 = con.prepareStatement("UPDATE `apex`.`user` SET `status` = 'Pending' WHERE (`username` = '"+name+"')");
-        statement2.executeQuery();
+        statement2.executeUpdate();
         return exist;
     }
 
-    public static void SelectDriver(String Username,String driver) throws Exception {
+    // update the driver to unavailable and user to wait
+    public static void SelectDriver(String Username,String driver, String userOrigin, String userDestination) throws Exception {
         Connection con = getConnection();
         PreparedStatement statement = con.prepareStatement("UPDATE driver SET `status` = 'Unavailable', `customer` = '"+Username+"'  WHERE (`name` = '"+driver+"')");
-        statement.executeQuery();
-        PreparedStatement statement2 = con.prepareStatement("UPDATE `apex`.`user` SET `status` = 'Waiting' WHERE (`username` = '"+Username+"')");
-        statement2.executeQuery();
+        statement.executeUpdate();
+        PreparedStatement statement2 = con.prepareStatement("UPDATE apex.user SET status = 'Waiting', starting_point = '"+ userOrigin +"' , destination = '"+ userDestination +"' WHERE username = '"+Username+"'");
+        statement2.executeUpdate();
     }
 
+    // update user to picked up
     public static void DriverReachedU(String Username) throws Exception {
         Connection con = getConnection();
         PreparedStatement statement2 = con.prepareStatement("UPDATE `apex`.`user` SET `status` = 'Picked Up' WHERE (`username` = '"+Username+"')");
-        statement2.executeQuery();
+        statement2.executeUpdate();
     }
 
+    // update user to reached and driver to available
     public static void Reached(String Username,String driver) throws Exception {
         Connection con = getConnection();
         PreparedStatement statement2 = con.prepareStatement("UPDATE `apex`.`user` SET `status` = 'Reached' WHERE (`username` = '"+Username+"')");
-        statement2.executeQuery();
-        PreparedStatement statement = con.prepareStatement("UPDATE driver SET `status` = 'Available', `customer` = ' '  WHERE (`name` = '"+driver+"')");
-        statement.executeQuery();
+        statement2.executeUpdate();
+        PreparedStatement statement = con.prepareStatement("UPDATE driver SET `status` = 'Available', `customer` = null  WHERE (`name` = '"+driver+"')");
+        statement.executeUpdate();
     }
 
     public static boolean Forgotpass (String username, String phone){

@@ -47,6 +47,8 @@ public class HelloApplication {
 
     HashMap<String, ImageView> car = new HashMap();
 
+    private String driver;
+
     protected static void initializeGroup(Pane rt) {
         root = rt;
     }
@@ -54,7 +56,7 @@ public class HelloApplication {
     // return imageview from driver name by hashmap
     protected void getImageFromDriverName(String driverName) {
         if (car.isEmpty()) return;
-
+        this.driver = driverName;
         imageView = car.get(driverName);
     }
 
@@ -134,7 +136,13 @@ public class HelloApplication {
         Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW);
         animation2.setDelay(Duration.millis(100));
         animation2.play();
-        animation2.setOnFinished(e -> clear(path, destination_point, true));
+        animation2.setOnFinished(e -> {
+            try {
+                clear(path, destination_point, true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
 
@@ -173,7 +181,8 @@ public class HelloApplication {
         }
     }
 
-    private void startMoveUserToLocation(double time) {
+    private void startMoveUserToLocation(double time) throws Exception {
+        Uconn.DriverReachedU(UserLogin.name);
         Path path = createPath();
         canvas = new Canvas(SCENE_WIDTH-400,SCENE_HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -193,11 +202,18 @@ public class HelloApplication {
         Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW);
         animation2.setDelay(Duration.millis(200));
         animation2.play();
-        animation2.setOnFinished(e -> clear(path, destination_point, false));
+        animation2.setOnFinished(e -> {
+            try {
+                clear(path, destination_point, false);
+                Uconn.Reached(UserLogin.name, driver);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     // utd means user to driver
-    private void clear(Path p, Circle destination_point, boolean utd) {
+    private void clear(Path p, Circle destination_point, boolean utd) throws Exception {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         p.getElements().clear();
         // remove the destination_point
@@ -205,7 +221,7 @@ public class HelloApplication {
         location.clear();
         if (utd) {
             root.getChildren().remove(imageView);
-            double time = findPath(userLocation, finalLocation);
+            double time = findPath(userLocation, finalLocation) * 3;
             startMoveUserToLocation(time);
         }
     }

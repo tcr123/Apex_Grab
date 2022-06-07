@@ -87,10 +87,12 @@ public class Animation implements Initializable {
 
     private HelloApplication obj;
 
-    public static String username = "";
+    private String username = "";
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1){
+        username = UserLogin.name;
+
         originBox.getItems().addAll(place);
 
 //        myChoiceBox.setOnAction(this::getPlace);
@@ -236,7 +238,9 @@ public class Animation implements Initializable {
     //Button to start the driver toward the user (test)
     public void starttherun(ActionEvent event) throws Exception {
 //        System.out.println(obj.userLocation);
+        alertMessage.setText("");
         String driver = getDriverFromTable();
+        Uconn.SelectDriver(username, driver, originBox.getValue(), destinationBox.getValue());
         System.out.println(driver);
         startFirst(stage, driver);
     }
@@ -270,7 +274,7 @@ public class Animation implements Initializable {
         Uconn.UsetCapacity(username, numberOfPassengersBox.getValue());
 
 
-        double time = obj.findPath(driverLocation, userLocation);
+        double time = obj.findPath(driverLocation, userLocation) * 3;
         System.out.println(time);
         obj.getImageFromDriverName(driver);
         obj.startMoveDriverToUser(time);
@@ -296,7 +300,7 @@ public class Animation implements Initializable {
                 driverList.clear();
                 conn = Uconn.getConnection();
                 int capacity = Integer.parseInt(numberOfPassengersBox.getValue());
-                driverRS = conn.createStatement().executeQuery("SELECT * FROM driver WHERE capacity = " + capacity + "");
+                driverRS = Uconn.ShowDriver(username, capacity);
 
                 DijkstraMap map = new DijkstraMap(LocationKey.LocationNum(originBox.getValue()));
                 map.dijkstra();
@@ -304,7 +308,7 @@ public class Animation implements Initializable {
                 userSelectionTime = esitmatedTime.getValue();
 
                 // Return the time of travelling from initialLocation to finalLocation
-                double fixed_time = map.getDistance(LocationKey.LocationNum(destinationBox.getValue()));
+                double fixed_time = map.getDistance(LocationKey.LocationNum(destinationBox.getValue())) * 3;
 
                 while (driverRS.next()) {
                     Driver temp = new Driver(driverRS.getString("name"), driverRS.getInt("capacity"),
@@ -316,7 +320,7 @@ public class Animation implements Initializable {
                     mapDriverToUser.dijkstra();
 
                     // Return the time of travelling from initialLocation to finalLocation
-                    double time = mapDriverToUser.getDistance(LocationKey.LocationNum(originBox.getValue())) + fixed_time;
+                    double time = mapDriverToUser.getDistance(LocationKey.LocationNum(originBox.getValue())) * 3 + fixed_time;
 
                     if (userSelectionTime.compareTo("nothing") != 0) {
                         if (Integer.parseInt(userSelectionTime) > time) {
