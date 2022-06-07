@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class Animation implements Initializable {
@@ -86,13 +87,7 @@ public class Animation implements Initializable {
 
     private HelloApplication obj;
 
-    Image myImage = new Image(getClass().getResourceAsStream("Map.jpeg"));
-
     public static String username = "";
-
-    public void displayImage() {
-        myImageView.setImage(myImage);
-    }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1){
@@ -136,7 +131,6 @@ public class Animation implements Initializable {
                 String timeFormat[] = sdf.format(new Date()).split(":");
                 timeFormat[1] = String.valueOf(Integer.parseInt(timeFormat[1]) % 12);
                 final String timenow = timeFormat[1] + ":" +timeFormat[2];
-                System.out.println(timenow);
                 Platform.runLater( () -> {
                     SystemTime.setText(timenow);
                 });
@@ -275,26 +269,11 @@ public class Animation implements Initializable {
         Uconn.SelectDestination(username, finalLocation);
         Uconn.UsetCapacity(username, numberOfPassengersBox.getValue());
 
-        try {
-            Image image = new Image(new FileInputStream("src/main/resources/com/example/loginassignment/car.png"));
-            ImageView imageView = new ImageView(image);
 
-            double oldLocationX = LocationKey.Coordinate(driverLocation).getX();
-            double oldLocationY = LocationKey.Coordinate(driverLocation).getY();
-            imageView.setX(oldLocationX - offSetX);
-            imageView.setY(oldLocationY - offSetY);
-
-            imageView.setFitHeight(50);
-            imageView.setFitWidth(50);
-
-            imageView.setPreserveRatio(true);
-
-            double time = obj.findPath(driverLocation, userLocation);
-            System.out.println(time);
-            obj.startMoveDriverToUser(time, imageView);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        double time = obj.findPath(driverLocation, userLocation);
+        System.out.println(time);
+        obj.getImageFromDriverName(driver);
+        obj.startMoveDriverToUser(time);
 
 //        stage.setScene(scene);
 //        stage.show();
@@ -353,6 +332,14 @@ public class Animation implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            // put all images of car to all driver Location
+            try {
+                inputAllLocationOfDriver(driverList);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
             oblist.addAll(driverList);
 
             driver_col.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -360,6 +347,11 @@ public class Animation implements Initializable {
 
             driverTable.setItems(oblist);
         }
+    }
+
+    private void inputAllLocationOfDriver(ArrayList<Driver> driverList) throws FileNotFoundException {
+        obj.clearImage();
+        obj.insertImage(driverList);
     }
 
     public String getDriverFromTable(){

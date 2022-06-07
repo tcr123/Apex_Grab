@@ -24,10 +24,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class HelloApplication {
     private static double SCENE_WIDTH = 1200;
     private static double SCENE_HEIGHT = 800;
+    private static final double offSetX = 5;
+    private static final double offSetY = 15;
 
     Canvas c = new Canvas();
     private static ArrayList<Location> location = new ArrayList<>();
@@ -40,8 +43,48 @@ public class HelloApplication {
     static Path path;
     static Pane root;
 
+    private ImageView imageView;
+
+    HashMap<String, ImageView> car = new HashMap();
+
     protected static void initializeGroup(Pane rt) {
         root = rt;
+    }
+
+    // return imageview from driver name by hashmap
+    protected void getImageFromDriverName(String driverName) {
+        if (car.isEmpty()) return;
+
+        imageView = car.get(driverName);
+    }
+
+    protected void insertImage(ArrayList<Driver> driverList) throws FileNotFoundException {
+        for (Driver e : driverList) {
+            Image image = new Image(new FileInputStream("src/main/resources/com/example/loginassignment/car.png"));
+            ImageView imageView = new ImageView(image);
+
+            double oldLocationX = LocationKey.Coordinate(e.getLocation()).getX();
+            double oldLocationY = LocationKey.Coordinate(e.getLocation()).getY();
+            imageView.setX(oldLocationX - offSetX);
+            imageView.setY(oldLocationY - offSetY);
+
+            imageView.setFitHeight(50);
+            imageView.setFitWidth(50);
+
+            imageView.setPreserveRatio(true);
+
+            car.put(e.getName(), imageView);
+
+            root.getChildren().add(imageView);
+        }
+    }
+
+    protected void clearImage() {
+        if (car.isEmpty()) return;
+
+        car.forEach( (key, value) -> {
+            root.getChildren().remove(value);
+        });
     }
 
     protected void setDriverLocation(String driverLocation1) {
@@ -69,7 +112,7 @@ public class HelloApplication {
         return time;
     }
 
-    protected void startMoveDriverToUser(double time, ImageView imageView) {
+    protected void startMoveDriverToUser(double time) {
         Path path = createPath();
         canvas = new Canvas(SCENE_WIDTH-400,SCENE_HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -83,17 +126,19 @@ public class HelloApplication {
         root.getChildren().addAll(path, canvas);
         root.getChildren().add(destination_point);
 
+        clearImage();
         root.getChildren().add(imageView);
-        rotateCar(imageView, location.get(0), location.get(1));
 
-        Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW, imageView);
+        rotateCar(location.get(0), location.get(1));
+
+        Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW);
         animation2.setDelay(Duration.millis(100));
         animation2.play();
-        animation2.setOnFinished(e -> clear(path, destination_point, true, imageView));
+        animation2.setOnFinished(e -> clear(path, destination_point, true));
     }
 
 
-    private void rotateCar(ImageView imageView, Location initial, Location second) {
+    private void rotateCar(Location initial, Location second) {
         if (initial.getX() == second.getX() && initial.getY() < second.getY()) {
             imageView.setRotate(0);
         }
@@ -128,7 +173,7 @@ public class HelloApplication {
         }
     }
 
-    private void startMoveUserToLocation(double time, ImageView imageView) {
+    private void startMoveUserToLocation(double time) {
         Path path = createPath();
         canvas = new Canvas(SCENE_WIDTH-400,SCENE_HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -141,18 +186,18 @@ public class HelloApplication {
 
         root.getChildren().addAll(path, canvas);
         root.getChildren().add(destination_point);
-
         root.getChildren().add(imageView);
-        rotateCar(imageView, location.get(0), location.get(1));
 
-        Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW, imageView);
+        rotateCar(location.get(0), location.get(1));
+
+        Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW);
         animation2.setDelay(Duration.millis(200));
         animation2.play();
-        animation2.setOnFinished(e -> clear(path, destination_point, false, null));
+        animation2.setOnFinished(e -> clear(path, destination_point, false));
     }
 
     // utd means user to driver
-    private void clear(Path p, Circle destination_point, boolean utd, ImageView imageView) {
+    private void clear(Path p, Circle destination_point, boolean utd) {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         p.getElements().clear();
         // remove the destination_point
@@ -161,7 +206,7 @@ public class HelloApplication {
         if (utd) {
             root.getChildren().remove(imageView);
             double time = findPath(userLocation, finalLocation);
-            startMoveUserToLocation(time, imageView);
+            startMoveUserToLocation(time);
         }
     }
 
@@ -188,7 +233,7 @@ public class HelloApplication {
         }
     }
 
-    private Animation createPathAnimation(Path path, Duration duration, Color go, ImageView imageView) {
+    private Animation createPathAnimation(Path path, Duration duration, Color go) {
 
         // move a node along a path. we want its position
         Circle pen = new Circle(0, 0, 4);
