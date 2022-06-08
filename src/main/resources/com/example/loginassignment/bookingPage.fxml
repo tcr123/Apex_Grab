@@ -19,7 +19,7 @@
          </image>
       </ImageView>
       <BorderPane prefHeight="200.0" prefWidth="200.0" />
-      <Button fx:id="testButton" layoutX="1111.0" layoutY="654.0" mnemonicParsing="false" onAction="#starttherun" text="Test" />
+      <Button fx:id="testButton" layoutX="1047.0" layoutY="623.0" mnemonicParsing="false" onAction="#starttherun" prefHeight="63.0" prefWidth="126.0" text="Lets Go" />
       <ChoiceBox fx:id="originBox" layoutX="1013.0" layoutY="116.0" prefHeight="25.0" prefWidth="172.0" />
       <Label fx:id="myLabel" layoutX="822.0" layoutY="110.0" prefHeight="36.0" prefWidth="161.0" text="Origin: ">
          <font>
@@ -38,7 +38,7 @@
          </font>
       </Label>
       <ChoiceBox fx:id="numberOfPassengersBox" layoutX="1013.0" layoutY="201.0" prefHeight="25.0" prefWidth="172.0" />
-      <TableView fx:id="driverTable" layoutX="815.0" layoutY="361.0" prefHeight="267.0" prefWidth="369.0">
+      <TableView fx:id="driverTable" layoutX="815.0" layoutY="361.0" prefHeight="181.0" prefWidth="369.0">
         <columns>
           <TableColumn fx:id="driver_col" prefWidth="267.0" text="Driver" />
           <TableColumn fx:id="estimatedTime_col" prefWidth="101.0" text="Estimated Time" />
@@ -61,5 +61,11 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Label fx:id="ringgit" layoutX="815.0" layoutY="574.0" prefHeight="36.0" prefWidth="223.0" text="Label">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="premiumBox" layoutX="1048.0" layoutY="574.0" prefHeight="36.0" prefWidth="126.0" />
    </children>
 </Pane>

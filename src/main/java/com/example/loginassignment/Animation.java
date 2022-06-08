@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -53,7 +54,8 @@ public class Animation implements Initializable {
             userLabel,
             capacityLabel,
             alertMessage,
-            SystemTime;
+            SystemTime,
+            ringgit;
     @FXML
     private ChoiceBox<String> originBox;
     @FXML
@@ -62,6 +64,8 @@ public class Animation implements Initializable {
     private ChoiceBox<String> numberOfPassengersBox;
     @FXML
     private ChoiceBox<String> esitmatedTime;
+    @FXML
+    private ChoiceBox<String> premiumBox;
     @FXML
     private TableView<Driver> driverTable;
     @FXML
@@ -85,6 +89,8 @@ public class Animation implements Initializable {
 
     private String[] listOfTime = {"nothing", "5", "10", "15", "20", "25", "30"};
 
+    private String[] premium = {"Non-Premium", "Premium"};
+
     private HelloApplication obj;
 
     private String username = "";
@@ -95,21 +101,18 @@ public class Animation implements Initializable {
 
         originBox.getItems().addAll(place);
 
-//        myChoiceBox.setOnAction(this::getPlace);
-
         destinationBox.getItems().addAll(finalplace);
-
-//        userChoiceBox.setOnAction(this::getfinalPlace);
 
         numberOfPassengersBox.getItems().addAll(capacity);
 
         esitmatedTime.getItems().addAll(listOfTime);
 
+        premiumBox.getItems().addAll(premium);
+
         Timenow();
 
         obj = new HelloApplication();
 
-//        capacityBox.setOnAction(this::getCapacity);
     }
 
     public void getEstimatedTime(ActionEvent event) {
@@ -240,6 +243,8 @@ public class Animation implements Initializable {
 //        System.out.println(obj.userLocation);
         alertMessage.setText("");
         String driver = getDriverFromTable();
+        getPremiumFromChoiceBox();
+//        String driver = getPremiumFromChoiceBox();
         Uconn.SelectDriver(username, driver, originBox.getValue(), destinationBox.getValue());
         System.out.println(driver);
         startFirst(stage, driver);
@@ -362,10 +367,29 @@ public class Animation implements Initializable {
         if (driverTable.getSelectionModel().getSelectedItem() == null){
             alertMessage.setText("Please select a driver!");
         } else {
+
             String selectedDriver = driverTable.getSelectionModel().getSelectedItem().getName();
             System.out.println(selectedDriver);
             return selectedDriver;
         }
         return null;
     }
+
+    public String getPremiumFromChoiceBox(){
+        if(premiumBox.getSelectionModel().getSelectedItem() == null){
+            alertMessage.setText("Please select sohai!");
+        } else if (premiumBox.getSelectionModel().getSelectedItem() == "Non-Premium"){
+            System.out.println("Non Premium work");
+//            ringgit.setText();
+            return null;
+        } else if (premiumBox.getSelectionModel().getSelectedItem() == "Premium"){
+            System.out.println("Premium work");
+//            ringgit.setText(+5);
+            return null;
+        }
+        return getPremiumFromChoiceBox();
+    }
+
+
+
 }

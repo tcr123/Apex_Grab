@@ -22,6 +22,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.*;
 
 
-public class HelloController /*implements Initializable*/ {
+public class HelloController  {
 
 }
