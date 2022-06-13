@@ -159,12 +159,13 @@ public class Uconn {
     }
 
     // update the driver to unavailable and user to wait
-    public static void SelectDriver(String Username,String driver, String userOrigin, String userDestination) throws Exception {
+    public static boolean SelectDriver(String Username,String driver, String userOrigin, String userDestination) throws Exception {
         Connection con = getConnection();
         PreparedStatement statement = con.prepareStatement("UPDATE driver SET `status` = 'Unavailable', `customer` = '"+Username+"'  WHERE (`name` = '"+driver+"')");
         statement.executeUpdate();
         PreparedStatement statement2 = con.prepareStatement("UPDATE apex.user SET status = 'Waiting', starting_point = '"+ userOrigin +"' , destination = '"+ userDestination +"' WHERE username = '"+Username+"'");
         statement2.executeUpdate();
+        return true;
     }
 
     // update user to picked up
@@ -181,6 +182,38 @@ public class Uconn {
         statement2.executeUpdate();
         PreparedStatement statement = con.prepareStatement("UPDATE driver SET `status` = 'Available', `customer` = null  WHERE (`name` = '"+driver+"')");
         statement.executeUpdate();
+    }
+
+    public static String FetchDriverStatus(String driver) throws Exception {
+        Connection con = getConnection();
+        PreparedStatement statement = con.prepareStatement("SELECT status FROM apex.driver WHERE name='"+driver+"' ");
+        ResultSet exist =statement.executeQuery();
+        String re=" ";
+        while (exist.next()) {
+            re = exist.getString("status");
+        }
+        return re;
+    }
+
+    public static boolean VipelectDriver(String Username,String driver, String userOrigin, String userDestination) throws Exception {
+        Connection con = getConnection();
+        String status=FetchDriverStatus(driver);
+        System.out.println(status);
+        if(status.equalsIgnoreCase("Available")){
+            PreparedStatement statement = con.prepareStatement("UPDATE driver SET `status` = 'Unavailable', `customer` = '"+Username+"'  WHERE (`name` = '"+driver+"')");
+            statement.executeUpdate();
+            PreparedStatement statement2 = con.prepareStatement("UPDATE apex.user SET status = 'Waiting', starting_point = '"+ userOrigin +"' , destination = '"+ userDestination +"' WHERE username = '"+Username+"'");
+            statement2.executeUpdate();
+            return true;
+
+        }
+
+        else if(status.equalsIgnoreCase("Unavailable")){
+            PreparedStatement statement = con.prepareStatement("UPDATE apex.user SET `status` = null WHERE (`name` = '"+Username+"')");
+            statement.executeUpdate();
+            return false;
+        }
+        return false;
     }
 
     public static boolean Forgotpass (String username, String phone){

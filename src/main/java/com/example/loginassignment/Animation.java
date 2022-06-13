@@ -23,6 +23,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLOutput;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,8 +49,11 @@ public class Animation implements Initializable {
     private String finalLocation;
     private String userSelectionTime;
 
+    private static boolean buy_premium;
+
     private static final double offSetX = 5;
     private static final double offSetY = 15;
+    private static double reluctant = 0;
 
     @FXML
     private Label myLabel,
@@ -73,6 +77,8 @@ public class Animation implements Initializable {
     private TableColumn<Driver, String> driver_col;
     @FXML
     private TableColumn<Driver, Double> estimatedTime_col;
+    @FXML
+    private RadioButton nonpremium, premium;
     @FXML
     private
     Connection conn = null;
@@ -252,17 +258,32 @@ public class Animation implements Initializable {
     public void starttherun(ActionEvent event) throws Exception {
 //        System.out.println(obj.userLocation);
         alertMessage.setText("");
-        originBox.setDisable(true);
-        destinationBox.setDisable(true);
-        numberOfPassengersBox.setDisable(true);
-        esitmatedTime.setDisable(true);
-        originBox.setDisable(true);
-        testButton.setDisable(true);
-        submitButton.setDisable(true);
         String driver = getDriverFromTable();
-        Uconn.SelectDriver(username, driver, originBox.getValue(), destinationBox.getValue());
-        System.out.println(driver);
-        startFirst(stage, driver);
+
+        if (driver != null) {
+            originBox.setDisable(true);
+            destinationBox.setDisable(true);
+            numberOfPassengersBox.setDisable(true);
+            esitmatedTime.setDisable(true);
+            originBox.setDisable(true);
+            testButton.setDisable(true);
+            submitButton.setDisable(true);
+
+            if (!buy_premium)
+                Thread.sleep(5000);
+
+            boolean sw;
+            sw=Uconn.VipelectDriver(username, driver, originBox.getValue(), destinationBox.getValue());
+            if(sw){
+                //svroom vroom
+                System.out.println(driver);
+                startFirst(stage, driver);
+            }
+            else{
+                //error msg ,back to select
+                System.out.println("Sorry driver gone");
+            }
+        }
     }
 
     public void startFirst(Stage stage, String driver) throws Exception {
@@ -293,7 +314,6 @@ public class Animation implements Initializable {
         Uconn.SelectDestination(username, finalLocation);
         Uconn.UsetCapacity(username, numberOfPassengersBox.getValue());
 
-
         double time = Math.round(obj.findPath(driverLocation, userLocation) * 2.5);
         System.out.println(time);
         obj.getImageFromDriverName(driver);
@@ -301,6 +321,29 @@ public class Animation implements Initializable {
 
 //        stage.setScene(scene);
 //        stage.show();
+    }
+
+    public void nonPremium(ActionEvent event) {
+        if (myPrice.getText() == "") return;
+        buy_premium = false;
+
+        String temp = myPrice.getText();
+        temp = temp.substring(2);
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+        double num = Double.parseDouble(temp) - reluctant;
+        myPrice.setText("RM"+decimalFormat.format(num));
+    }
+
+    public void Premium(ActionEvent event) {
+        if (myPrice.getText() == "") return;
+        buy_premium = true;
+
+        reluctant = 10;
+        String temp = myPrice.getText();
+        temp = temp.substring(2);
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+        double num = Double.parseDouble(temp) + reluctant;
+        myPrice.setText("RM"+decimalFormat.format(num));
     }
 
     public void submitButtonOnAction(ActionEvent event){
@@ -313,7 +356,7 @@ public class Animation implements Initializable {
         } else if (originBox.getValue().equals(destinationBox.getValue())){
             alertMessage.setText("Origin and Destination should not be same!");
         } else if (esitmatedTime.getValue() == null){
-            alertMessage.setText("Please select a range of time");
+            alertMessage.setText("Please select a range of time!");
         } else {
             try {
                 alertMessage.setText("");
@@ -331,6 +374,7 @@ public class Animation implements Initializable {
                 // Return the time of travelling from initialLocation to finalLocation
                 double fixed_time = Math.round(map.getDistance(LocationKey.LocationNum(destinationBox.getValue())) * 2.5);
                 DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                buy_premium = false;
                 myPrice.setText("RM"+decimalFormat.format(fixed_time));
 
                 while (driverRS.next()) {
