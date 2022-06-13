@@ -6,9 +6,9 @@ public class LocationKey {
         switch (c)
         {
             case 0:
-                return "SLUMMLAKES";
+                return "SLUMLAKES";
             case 1:
-                return "CONTAINEMENT";
+                return "CONTAINMENT";
             case 2:
                 return "RUNOFF";
             case 3:
@@ -47,9 +47,9 @@ public class LocationKey {
     {
         switch (c)
         {
-            case "SLUMMLAKES":
+            case "SLUMLAKES":
                 return 0;
-            case "CONTAINEMENT":
+            case "CONTAINMENT":
                 return 1;
             case "RUNOFF":
                 return 2;
@@ -82,6 +82,7 @@ public class LocationKey {
             case "HYDRO DAM":
                 return 16;
         }
+        System.out.println(c);
         return -1;
     }
 
@@ -89,9 +90,9 @@ public class LocationKey {
     {
         switch (ch)
         {
-            case "SLUMMLAKES":
+            case "SLUMLAKES":
                 return new Location(120,191);
-            case "CONTAINEMENT":
+            case "CONTAINMENT":
                 return new Location(351,219);
             case "RUNOFF":
                 return new Location(107,310);

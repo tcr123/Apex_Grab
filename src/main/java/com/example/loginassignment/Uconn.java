@@ -20,7 +20,7 @@ public class Uconn {
         try {
             String driver = "com.mysql.cj.jdbc.Driver";
 //            String url = "jdbc:mysql://localhost:3306/apex";
-            String url = "jdbc:mysql://10.210.6.168:3306/apex";
+            String url = "jdbc:mysql://10.210.8.145/apex";
             String username = "apex";
             String password = "1118";
             Class.forName(driver);
@@ -230,6 +230,32 @@ public class Uconn {
         catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    // update the driver to available and drop passenger
+    public static void dropPassenger(String username, String driverName) throws Exception {
+        Connection con = getConnection();
+        PreparedStatement statement = con.prepareStatement("UPDATE driver SET `status` = 'Available', `customer` = null  WHERE name = '"+driverName+"'");
+        statement.executeUpdate();
+        statement = con.prepareStatement("UPDATE user SET status = null, expected_arrival_time = null, starting_point = null, destination = null WHERE username = '"+username+"'");
+        statement.executeUpdate();
+    }
+
+    public static void setRating(String driverName, int value, String comment) throws Exception {
+        //fetch user capacity
+        Connection con = getConnection();
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM apex.driver where name='"+driverName+"' ");
+        ResultSet rs = statement.executeQuery();
+        double rate=0;
+        while (rs.next()) {
+            rate = rs.getDouble("rating");
+        }
+        System.out.println(rate);
+        double rating = (value+rate) / 2;
+        statement = con.prepareStatement("UPDATE `apex`.`driver` SET `rating` = '"+rating+"' WHERE (name = '"+driverName+"' ); ");
+        statement.executeUpdate();
+        statement = con.prepareStatement("INSERT INTO comment VALUES ('"+driverName+"', '"+comment+"')");
+        statement.executeUpdate();
     }
 
 }

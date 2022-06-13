@@ -23,6 +23,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,8 +39,10 @@ public class Animation implements Initializable {
     private Parent root;
     private double time;
     private Group rt;
+    @FXML
     private Button start,
-            testButton;
+            testButton,
+            submitButton;
     private String driverLocation;
     private String userLocation;
     private String finalLocation;
@@ -53,7 +56,9 @@ public class Animation implements Initializable {
             userLabel,
             capacityLabel,
             alertMessage,
-            SystemTime;
+            SystemTime,
+            myPrice;
+
     @FXML
     private ChoiceBox<String> originBox;
     @FXML
@@ -77,9 +82,9 @@ public class Animation implements Initializable {
 
     private volatile boolean stop = false;
 
-    private String[] place={"SLUMMLAKES","CONTAINEMENT","RUNOFF","THE PIT","AIRBASE","BUNKER","THUNDERDOME","SKULL TOWN","MARKET","WATER TREATMENT","REPULSOR","THE CAGE","ARTILLERY","RELAY","WETLANDS","SWAMPS","HYDRO DAM"};
+    private String[] place={"SLUMLAKES","CONTAINMENT","RUNOFF","THE PIT","AIRBASE","BUNKER","THUNDERDOME","SKULL TOWN","MARKET","WATER TREATMENT","REPULSOR","THE CAGE","ARTILLERY","RELAY","WETLANDS","SWAMPS","HYDRO DAM"};
 
-    private String[] finalplace={"SLUMMLAKES","CONTAINEMENT","RUNOFF","THE PIT","AIRBASE","BUNKER","THUNDERDOME","SKULL TOWN","MARKET","WATER TREATMENT","REPULSOR","THE CAGE","ARTILLERY","RELAY","WETLANDS","SWAMPS","HYDRO DAM"};
+    private String[] finalplace={"SLUMLAKES","CONTAINMENT","RUNOFF","THE PIT","AIRBASE","BUNKER","THUNDERDOME","SKULL TOWN","MARKET","WATER TREATMENT","REPULSOR","THE CAGE","ARTILLERY","RELAY","WETLANDS","SWAMPS","HYDRO DAM"};
 
     private String[] capacity = {"4", "6"};
 
@@ -108,6 +113,14 @@ public class Animation implements Initializable {
         Timenow();
 
         obj = new HelloApplication();
+
+        originBox.setDisable(false);
+        destinationBox.setDisable(false);
+        numberOfPassengersBox.setDisable(false);
+        esitmatedTime.setDisable(false);
+        originBox.setDisable(false);
+        testButton.setDisable(false);
+        submitButton.setDisable(false);
 
 //        capacityBox.setOnAction(this::getCapacity);
     }
@@ -149,10 +162,10 @@ public class Animation implements Initializable {
         myLabel.setText("Going to "+myPlace+" ?");
         switch  (myPlace)
         {
-            case "SLUMMLAKES":
-                return userLocation="SLUMMLAKES";
+            case "SLUMLAKES":
+                return userLocation="SLUMLAKES";
             case "CONTAINEMENT":
-                return userLocation="CONTAINEMENT";
+                return userLocation="CONTAINMENT";
             case "RUNOFF":
                 return userLocation="RUNOFF";
             case "THE PIT":
@@ -196,10 +209,10 @@ public class Animation implements Initializable {
         userLabel.setText("Wanna Go to "+usermyPlace+" ?");
         switch  (usermyPlace)
         {
-            case "SLUMMLAKES":
-                return finalLocation="SLUMMLAKES";
-            case "CONTAINEMENT":
-                return finalLocation="CONTAINEMENT";
+            case "SLUMLAKES":
+                return finalLocation="SLUMLAKES";
+            case "CONTAINMENT":
+                return finalLocation="CONTAINMENT";
             case "RUNOFF":
                 return finalLocation="RUNOFF";
             case "THE PIT":
@@ -239,6 +252,13 @@ public class Animation implements Initializable {
     public void starttherun(ActionEvent event) throws Exception {
 //        System.out.println(obj.userLocation);
         alertMessage.setText("");
+        originBox.setDisable(true);
+        destinationBox.setDisable(true);
+        numberOfPassengersBox.setDisable(true);
+        esitmatedTime.setDisable(true);
+        originBox.setDisable(true);
+        testButton.setDisable(true);
+        submitButton.setDisable(true);
         String driver = getDriverFromTable();
         Uconn.SelectDriver(username, driver, originBox.getValue(), destinationBox.getValue());
         System.out.println(driver);
@@ -274,7 +294,7 @@ public class Animation implements Initializable {
         Uconn.UsetCapacity(username, numberOfPassengersBox.getValue());
 
 
-        double time = obj.findPath(driverLocation, userLocation) * 3;
+        double time = Math.round(obj.findPath(driverLocation, userLocation) * 2.5);
         System.out.println(time);
         obj.getImageFromDriverName(driver);
         obj.startMoveDriverToUser(time);
@@ -296,6 +316,7 @@ public class Animation implements Initializable {
             alertMessage.setText("Please select a range of time");
         } else {
             try {
+                alertMessage.setText("");
                 oblist.clear();
                 driverList.clear();
                 conn = Uconn.getConnection();
@@ -308,7 +329,9 @@ public class Animation implements Initializable {
                 userSelectionTime = esitmatedTime.getValue();
 
                 // Return the time of travelling from initialLocation to finalLocation
-                double fixed_time = map.getDistance(LocationKey.LocationNum(destinationBox.getValue())) * 3;
+                double fixed_time = Math.round(map.getDistance(LocationKey.LocationNum(destinationBox.getValue())) * 2.5);
+                DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                myPrice.setText("RM"+decimalFormat.format(fixed_time));
 
                 while (driverRS.next()) {
                     Driver temp = new Driver(driverRS.getString("name"), driverRS.getInt("capacity"),
@@ -320,7 +343,7 @@ public class Animation implements Initializable {
                     mapDriverToUser.dijkstra();
 
                     // Return the time of travelling from initialLocation to finalLocation
-                    double time = mapDriverToUser.getDistance(LocationKey.LocationNum(originBox.getValue())) * 3 + fixed_time;
+                    double time = Math.round(mapDriverToUser.getDistance(LocationKey.LocationNum(originBox.getValue())) * 2.5) + fixed_time;
 
                     if (userSelectionTime.compareTo("nothing") != 0) {
                         if (Integer.parseInt(userSelectionTime) > time) {

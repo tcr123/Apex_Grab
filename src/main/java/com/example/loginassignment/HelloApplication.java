@@ -7,6 +7,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -47,7 +49,11 @@ public class HelloApplication {
 
     HashMap<String, ImageView> car = new HashMap();
 
-    private String driver;
+    private static String driver;
+
+    public static String getDriver() {
+        return driver;
+    }
 
     protected static void initializeGroup(Pane rt) {
         root = rt;
@@ -131,18 +137,27 @@ public class HelloApplication {
         clearImage();
         root.getChildren().add(imageView);
 
-        rotateCar(location.get(0), location.get(1));
+        if (location.size() != 1) {
+            rotateCar(location.get(0), location.get(1));
 
-        Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW);
-        animation2.setDelay(Duration.millis(100));
-        animation2.play();
-        animation2.setOnFinished(e -> {
+            Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW);
+            animation2.setDelay(Duration.millis(100));
+            animation2.play();
+            animation2.setOnFinished(e -> {
+                try {
+                    clear(path, destination_point, true);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
+        }
+        else {
             try {
                 clear(path, destination_point, true);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }
     }
 
 
@@ -197,7 +212,8 @@ public class HelloApplication {
         root.getChildren().add(destination_point);
         root.getChildren().add(imageView);
 
-        rotateCar(location.get(0), location.get(1));
+        if (location.size() != 1)
+            rotateCar(location.get(0), location.get(1));
 
         Animation animation2 = createPathAnimation(path, Duration.seconds(time), Color.YELLOW);
         animation2.setDelay(Duration.millis(200));
@@ -206,6 +222,12 @@ public class HelloApplication {
             try {
                 clear(path, destination_point, false);
                 Uconn.Reached(UserLogin.name, driver);
+                Thread.sleep(3000);
+                Parent root = FXMLLoader.load(getClass().getResource("rating.fxml"));
+                Stage stage = (Stage) path.getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
