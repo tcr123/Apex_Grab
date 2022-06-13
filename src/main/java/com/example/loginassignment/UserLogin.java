@@ -38,7 +38,7 @@ public class UserLogin extends Application {
         if(sw==0){
             alertMessage.setText("success!");
             name = username.getText();
-            Pane root = FXMLLoader.load(getClass().getResource("bookingPage.fxml"));
+            Pane root = FXMLLoader.load(getClass().getResource("Rating.fxml"));
             Stage stage = (Stage) username.getScene().getWindow();
             HelloApplication.initializeGroup(root);
             Scene scene = new Scene(root);
