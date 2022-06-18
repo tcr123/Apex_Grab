@@ -317,7 +317,7 @@ public class Uconn {
 
         statement = con.prepareStatement("UPDATE `apex`.`driver` SET `rating` = '"+rating+"' WHERE (name = '"+driverName+"' ); ");
         statement.executeUpdate();
-        statement = con.prepareStatement("INSERT INTO comment VALUES ('"+driverName+"', '"+comment+"')");
+        statement = con.prepareStatement("INSERT INTO `apex`.`comment` (`driver`, `comment`) VALUES ('"+driverName+"', '"+comment+"');    ");
         statement.executeUpdate();
     }
 
