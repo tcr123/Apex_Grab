@@ -64,7 +64,7 @@ public class Uconn {
             }
 
             //INSERT INTO member TABLE
-            statement = con.prepareStatement("INSERT INTO apex.user (username,phone,password)VALUES ( '" + username + "', '" + phone + "' , '" + pass + "' )");
+            statement = con.prepareStatement("INSERT INTO apex.user (username,phone,password,login)VALUES ( '" + username + "', '" + phone + "' , '" + pass + "','0' )");
             statement.executeUpdate();
 
 
@@ -104,11 +104,38 @@ public class Uconn {
             System.out.println("\nWrong password!");
             return 2;
         }
+
+
+        PreparedStatement statement1 = con.prepareStatement("SELECT login FROM user WHERE username = '" + Credential + "' ");
+        ResultSet exist1 = statement1.executeQuery();
+        int login=0;
+        while (exist1.next()) {
+            login = exist1.getInt("login");
+        }
+        if(login ==1){
+            return 3;
+        }
+
+
         if(got1==1) {
+            Login(Credential);
             return 0;
         }
-        return 9;
+
+        return 69;
     }
+    public static void Login(String Username) throws Exception {
+        Connection con = getConnection();
+        PreparedStatement statement = con.prepareStatement("UPDATE `apex`.`user` SET `login` = '1' WHERE (`username` = '"+Username+"');  ");
+        statement.executeUpdate();
+    }
+
+    public static void LogOut(String Username) throws Exception {
+        Connection con = getConnection();
+        PreparedStatement statement = con.prepareStatement("UPDATE `apex`.`user` SET `login` = '0' WHERE (`username` = '"+Username+"');  ");
+        statement.executeUpdate();
+    }
+
 
     public static void SelectLocation(String Username,String Location) throws Exception {
         //invote this method after user enter his current location

@@ -51,6 +51,10 @@ public class UserLogin extends Application {
         else if(sw==1){
             alertMessage.setText("Wrong username or password");
         }
+
+        else if(sw==3){
+            alertMessage.setText("Account is in use");
+        }
     }
 
     public void goForgotPasswordOnAction(ActionEvent event) throws IOException {
