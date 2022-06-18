@@ -20,7 +20,7 @@ public class Uconn {
         try {
             String driver = "com.mysql.cj.jdbc.Driver";
 //            String url = "jdbc:mysql://localhost:3306/apex";
-            String url = "jdbc:mysql://10.210.8.145/apex";
+            String url = "jdbc:mysql://10.210.21.151/apex";
             String username = "apex";
             String password = "1118";
             Class.forName(driver);
@@ -180,8 +180,6 @@ public class Uconn {
         Connection con = getConnection();
         PreparedStatement statement2 = con.prepareStatement("UPDATE `apex`.`user` SET `status` = 'Reached' WHERE (`username` = '"+Username+"')");
         statement2.executeUpdate();
-        PreparedStatement statement = con.prepareStatement("UPDATE driver SET `status` = 'Available', `customer` = null  WHERE (`name` = '"+driver+"')");
-        statement.executeUpdate();
     }
 
     public static String FetchDriverStatus(String driver) throws Exception {
@@ -209,7 +207,7 @@ public class Uconn {
         }
 
         else if(status.equalsIgnoreCase("Unavailable")){
-            PreparedStatement statement = con.prepareStatement("UPDATE apex.user SET `status` = null WHERE (`name` = '"+Username+"')");
+            PreparedStatement statement = con.prepareStatement("UPDATE apex.user SET `status` = 'Pending' WHERE (`username` = '"+Username+"')");
             statement.executeUpdate();
             return false;
         }
@@ -270,7 +268,7 @@ public class Uconn {
         Connection con = getConnection();
         PreparedStatement statement = con.prepareStatement("UPDATE driver SET `status` = 'Available', `customer` = null  WHERE name = '"+driverName+"'");
         statement.executeUpdate();
-        statement = con.prepareStatement("UPDATE user SET status = null, expected_arrival_time = null, starting_point = null, destination = null WHERE username = '"+username+"'");
+        statement = con.prepareStatement("UPDATE user SET status = null, capacity=null, expected_arrival_time = null, starting_point = null, destination = null WHERE username = '"+username+"'");
         statement.executeUpdate();
     }
 
@@ -291,4 +289,20 @@ public class Uconn {
         statement.executeUpdate();
     }
 
+    public static Boolean IsAvailable(String driver) throws Exception {
+        Connection con = getConnection();
+        PreparedStatement statement = con.prepareStatement("SELECT status FROM apex.driver WHERE name='"+driver+"' ");
+        ResultSet exist =statement.executeQuery();
+        String re=" ";
+        while (exist.next()) {
+            re = exist.getString("status");
+        }
+        if(re.equalsIgnoreCase("Available")){
+            return true;
+        }
+        else if(re.equalsIgnoreCase("Unavailable")){
+            return false;
+        }
+        return true;
+    }
 }

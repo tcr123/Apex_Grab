@@ -20,10 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLOutput;
+import java.sql.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -259,16 +256,16 @@ public class Animation implements Initializable {
 //        System.out.println(obj.userLocation);
         alertMessage.setText("");
         String driver = getDriverFromTable();
-
         if (driver != null) {
-            originBox.setDisable(true);
-            destinationBox.setDisable(true);
-            numberOfPassengersBox.setDisable(true);
-            esitmatedTime.setDisable(true);
-            originBox.setDisable(true);
-            testButton.setDisable(true);
-            submitButton.setDisable(true);
-
+            if (!Uconn.IsAvailable(driver)){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Information");
+                alert.setHeaderText("Sorry driver gone");
+                alert.showAndWait();
+                System.out.println("Sorry driver gone");
+                refreshTable();
+                return;
+            }
             if (!buy_premium)
                 Thread.sleep(5000);
 
@@ -278,9 +275,20 @@ public class Animation implements Initializable {
                 //svroom vroom
                 System.out.println(driver);
                 startFirst(stage, driver);
+                originBox.setDisable(true);
+                destinationBox.setDisable(true);
+                numberOfPassengersBox.setDisable(true);
+                esitmatedTime.setDisable(true);
+                originBox.setDisable(true);
+                testButton.setDisable(true);
+                submitButton.setDisable(true);
             }
             else{
                 //error msg ,back to select
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Information");
+                alert.setHeaderText("Sorry driver gone");
+                alert.showAndWait();
                 System.out.println("Sorry driver gone");
             }
         }
@@ -347,6 +355,10 @@ public class Animation implements Initializable {
     }
 
     public void submitButtonOnAction(ActionEvent event){
+        refreshTable();
+    }
+
+    public void refreshTable(){
         if (originBox.getValue() == null){
             alertMessage.setText("Please enter origin!");
         } else if (destinationBox.getValue() == null){
