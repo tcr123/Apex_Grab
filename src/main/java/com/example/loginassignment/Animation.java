@@ -40,7 +40,8 @@ public class Animation implements Initializable {
     @FXML
     private Button start,
             testButton,
-            submitButton;
+            submitButton,
+            logoutButton;
     private String driverLocation;
     private String userLocation;
     private String finalLocation;
@@ -446,5 +447,14 @@ public class Animation implements Initializable {
             return selectedDriver;
         }
         return null;
+    }
+
+    public void logoutButtonOnAction(ActionEvent event) throws Exception {
+        Uconn.LogOut(username);
+        Parent root = FXMLLoader.load(getClass().getResource("loginPage.fxml"));
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }

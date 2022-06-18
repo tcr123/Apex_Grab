@@ -20,21 +20,26 @@
             <Image url="@Map.jpeg" />
          </image>
       </ImageView>
+      <ImageView fitHeight="800.0" fitWidth="400.0" layoutX="800.0" opacity="0.75" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../main.png" />
+         </image>
+      </ImageView>
       <BorderPane prefHeight="200.0" prefWidth="200.0" />
-      <Button fx:id="testButton" layoutX="1100.0" layoutY="658.0" mnemonicParsing="false" onAction="#starttherun" text="Booking" />
+      <Button fx:id="testButton" layoutX="1122.0" layoutY="676.0" mnemonicParsing="false" onAction="#starttherun" text="Booking" />
       <ChoiceBox fx:id="originBox" layoutX="1013.0" layoutY="116.0" prefHeight="25.0" prefWidth="172.0" />
-      <Label fx:id="myLabel" layoutX="822.0" layoutY="110.0" prefHeight="36.0" prefWidth="161.0" text="Origin: ">
+      <Label fx:id="myLabel" layoutX="822.0" layoutY="110.0" prefHeight="36.0" prefWidth="161.0" text="Origin: " textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
       <ChoiceBox fx:id="destinationBox" layoutX="1013.0" layoutY="159.0" prefHeight="25.0" prefWidth="172.0" />
-      <Label fx:id="userLabel" layoutX="822.0" layoutY="153.0" prefHeight="36.0" prefWidth="161.0" text="Destination: ">
+      <Label fx:id="userLabel" layoutX="822.0" layoutY="153.0" prefHeight="36.0" prefWidth="161.0" text="Destination: " textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="capacityLabel" layoutX="824.0" layoutY="195.0" prefHeight="36.0" prefWidth="187.0" text="Number of Passengers:">
+      <Label fx:id="capacityLabel" layoutX="824.0" layoutY="195.0" prefHeight="36.0" prefWidth="187.0" text="Number of Passengers:" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
@@ -52,7 +57,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="timeByUser" layoutX="824.0" layoutY="236.0" prefHeight="36.0" prefWidth="187.0" text="Estimated Time">
+      <Label fx:id="timeByUser" layoutX="824.0" layoutY="236.0" prefHeight="36.0" prefWidth="187.0" text="Estimated Time" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
@@ -63,7 +68,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="priceLabel" layoutX="822.0" layoutY="652.0" prefHeight="36.0" prefWidth="161.0" text="Price: ">
+      <Label fx:id="priceLabel" layoutX="822.0" layoutY="652.0" prefHeight="36.0" prefWidth="161.0" text="Price: " textFill="#1e0202">
          <font>
             <Font size="18.0" />
          </font>
@@ -73,11 +78,26 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <RadioButton fx:id="nonpremium" layoutX="991.0" layoutY="644.0" mnemonicParsing="false" onAction="#nonPremium" text="Non Premium">
+      <RadioButton fx:id="nonpremium" layoutX="992.0" layoutY="652.0" mnemonicParsing="false" onAction="#nonPremium" text="Non Premium">
          <toggleGroup>
             <ToggleGroup fx:id="pre" />
          </toggleGroup>
+         <font>
+            <Font size="15.0" />
+         </font>
       </RadioButton>
-      <RadioButton fx:id="premium" layoutX="1011.0" layoutY="688.0" mnemonicParsing="false" onAction="#Premium" text="Premium" toggleGroup="$pre" />
+      <RadioButton fx:id="premium" layoutX="992.0" layoutY="689.0" mnemonicParsing="false" onAction="#Premium" text="Premium" textFill="#110000" toggleGroup="$pre">
+         <font>
+            <Font size="16.0" />
+         </font></RadioButton>
+      <Button fx:id="logoutButton" layoutX="14.0" layoutY="724.0" mnemonicParsing="false" onAction="#logoutButtonOnAction" prefHeight="64.0" prefWidth="60.0">
+         <graphic>
+            <ImageView fitHeight="62.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../door.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </Pane>
