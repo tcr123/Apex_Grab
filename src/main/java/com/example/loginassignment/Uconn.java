@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 
 public class Uconn {
     private static String usn;
@@ -308,8 +309,12 @@ public class Uconn {
         while (rs.next()) {
             rate = rs.getDouble("rating");
         }
-        System.out.println(rate);
+
         double rating = (value+rate) / 2;
+        DecimalFormat decimalFormat = new DecimalFormat("#0.0");
+        rating = Double.parseDouble(decimalFormat.format(rating));
+        // System.out.println(rating);
+
         statement = con.prepareStatement("UPDATE `apex`.`driver` SET `rating` = '"+rating+"' WHERE (name = '"+driverName+"' ); ");
         statement.executeUpdate();
         statement = con.prepareStatement("INSERT INTO comment VALUES ('"+driverName+"', '"+comment+"')");
