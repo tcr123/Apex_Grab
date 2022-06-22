@@ -45,10 +45,11 @@
          </font>
       </Label>
       <ChoiceBox fx:id="numberOfPassengersBox" layoutX="1013.0" layoutY="201.0" prefHeight="25.0" prefWidth="172.0" />
-      <TableView fx:id="driverTable" layoutX="815.0" layoutY="361.0" prefHeight="267.0" prefWidth="369.0">
+      <TableView fx:id="driverTable" layoutX="815.0" layoutY="361.0" prefHeight="267.0" prefWidth="377.0">
         <columns>
-          <TableColumn fx:id="driver_col" prefWidth="267.0" text="Driver" />
-          <TableColumn fx:id="estimatedTime_col" prefWidth="101.0" text="Estimated Time" />
+          <TableColumn fx:id="driver_col" prefWidth="226.4000244140625" text="Driver" />
+          <TableColumn fx:id="estimatedTime_col" prefWidth="95.199951171875" text="Estimated Time" />
+            <TableColumn fx:id="rating_col" prefWidth="60.800048828125" text="Rating" />
         </columns>
       </TableView>
       <Button fx:id="submitButton" layoutX="1094.0" layoutY="292.0" mnemonicParsing="false" onAction="#submitButtonOnAction" prefHeight="25.0" prefWidth="71.0" text="Submit" />

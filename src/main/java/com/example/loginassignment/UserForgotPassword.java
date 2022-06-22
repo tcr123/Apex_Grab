@@ -28,7 +28,7 @@ public class UserForgotPassword {
         Uconn.setpass(Uconn.getUsn(),newPassword.getText());
         System.out.println("work");
         Parent root = FXMLLoader.load(getClass().getResource("loginPage.fxml"));
-        Stage stage = (Stage) alertMessage.getScene().getWindow();
+        Stage stage = (Stage) updatePasswordButton.getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

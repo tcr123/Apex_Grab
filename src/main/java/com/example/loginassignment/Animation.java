@@ -76,6 +76,8 @@ public class Animation implements Initializable {
     @FXML
     private TableColumn<Driver, Double> estimatedTime_col;
     @FXML
+    private TableColumn<Driver,Double> rating_col;
+    @FXML
     private RadioButton nonpremium, premium;
     @FXML
     private
@@ -283,6 +285,7 @@ public class Animation implements Initializable {
                 originBox.setDisable(true);
                 testButton.setDisable(true);
                 submitButton.setDisable(true);
+                logoutButton.setDisable(true);
             }
             else{
                 //error msg ,back to select
@@ -428,6 +431,7 @@ public class Animation implements Initializable {
 
             driver_col.setCellValueFactory(new PropertyValueFactory<>("name"));
             estimatedTime_col.setCellValueFactory(new PropertyValueFactory<>("estimatedTime"));
+            rating_col.setCellValueFactory(new PropertyValueFactory<>("rating"));
 
             driverTable.setItems(oblist);
         }

@@ -85,5 +85,19 @@ public class UserLogin extends Application {
         stage.setScene(scene);
         stage.show();
         System.out.println("Work start");
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+            exit(stage);
+        });
+    }
+
+    public void exit(Stage stage){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit");
+        alert.setHeaderText("Exit confirmation");
+        alert.setContentText("Do you want to exit?: ");
+        if (alert.showAndWait().get() == ButtonType.OK){
+            stage.close();
+        }
     }
 }

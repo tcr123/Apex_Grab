@@ -20,8 +20,8 @@ public class Uconn {
     public static Connection getConnection() {
         try {
             String driver = "com.mysql.cj.jdbc.Driver";
-//            String url = "jdbc:mysql://localhost:3306/apex";
-            String url = "jdbc:mysql://10.210.21.151/apex";
+            String url = "jdbc:mysql://localhost:3306/apex";
+//            String url = "jdbc:mysql://10.210.21.151/apex";
             String username = "apex";
             String password = "1118";
             Class.forName(driver);
@@ -133,7 +133,8 @@ public class Uconn {
 
     public static void LogOut(String Username) throws Exception {
         Connection con = getConnection();
-        PreparedStatement statement = con.prepareStatement("UPDATE `apex`.`user` SET `login` = '0' WHERE (`username` = '"+Username+"');  ");
+//        PreparedStatement statement = con.prepareStatement("UPDATE `apex`.`user` SET `login` = '0', 'status' = null  WHERE (`username` = '"+Username+"');  ");
+        PreparedStatement statement = con.prepareStatement("UPDATE `apex`.`user` SET `status` = null, `login` = '0' WHERE (`username` = '"+Username+"') ");
         statement.executeUpdate();
     }
 
