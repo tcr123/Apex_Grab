@@ -337,13 +337,16 @@ public class Animation implements Initializable {
 
     public void nonPremium(ActionEvent event) {
         if (myPrice.getText() == "") return;
-        buy_premium = false;
 
         String temp = myPrice.getText();
         temp = temp.substring(2);
         DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-        double num = Double.parseDouble(temp) - reluctant;
+        double num = Double.parseDouble(temp);
+        if (buy_premium) {
+            num = Double.parseDouble(temp) - reluctant;
+        }
         myPrice.setText("RM"+decimalFormat.format(num));
+        buy_premium = false;
     }
 
     public void Premium(ActionEvent event) {
@@ -440,6 +443,7 @@ public class Animation implements Initializable {
     private void inputAllLocationOfDriver(ArrayList<Driver> driverList) throws FileNotFoundException {
         obj.clearImage();
         obj.insertImage(driverList);
+        System.out.println("Hello");
     }
 
     public String getDriverFromTable(){

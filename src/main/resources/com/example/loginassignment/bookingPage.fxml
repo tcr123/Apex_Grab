@@ -22,7 +22,7 @@
       </ImageView>
       <ImageView fitHeight="800.0" fitWidth="400.0" layoutX="800.0" opacity="0.75" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../main.png" />
+            <Image url="@main.png" />
          </image>
       </ImageView>
       <BorderPane prefHeight="200.0" prefWidth="200.0" />
@@ -95,7 +95,7 @@
          <graphic>
             <ImageView fitHeight="62.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../door.png" />
+                  <Image url="@door.png" />
                </image>
             </ImageView>
          </graphic>
