@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -103,8 +104,9 @@ public class UserRating implements Initializable {
         System.out.println(UserLogin.name);
         Uconn.setRating(HelloApplication.getDriver(), starNumber, comment);
         Uconn.dropPassenger(UserLogin.name, HelloApplication.getDriver());
-        Parent root = FXMLLoader.load(getClass().getResource("bookingPage.fxml"));
+        Pane root = FXMLLoader.load(getClass().getResource("bookingPage.fxml"));
         Stage stage = (Stage) commentField.getScene().getWindow();
+        HelloApplication.initializeGroup(root);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
